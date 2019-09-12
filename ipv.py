@@ -5,9 +5,9 @@ import os
 import re
 import subprocess
 
-IPVANISH_DIR = "/usr/local/share/ipvanish"
-SERVER_FILES_DIR = os.path.join(IPVANISH_DIR, "servers")
-RANK_FILE = os.path.join(IPVANISH_DIR, "server_ratings.txt")
+IPV_DIR = "/usr/local/share/ipv"
+SERVER_FILES_DIR = os.path.join(IPV_DIR, "servers")
+RANK_FILE = os.path.join(IPV_DIR, "server_ratings.txt")
 
 #TODO Pull all servers from website
 #TODO Progress Bar
