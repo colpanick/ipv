@@ -30,7 +30,7 @@ def get_avg_ping(url, ping_count=5):
 def rank():
     
     file_list = os.listdir(SERVER_FILES_DIR)
-    file_list = file_list[:6]
+    #file_list = file_list[:6]  # For testing
     url_dict = {get_url(filename): filename for filename in file_list}
 
     ping_dict = {url: get_avg_ping(url) for url in url_dict.keys()}
@@ -50,7 +50,6 @@ def connect(rank_num):
             full_filename = os.path.join(SERVER_FILES_DIR, filename)
             if rank == rank_num:
                 os.chdir(SERVER_FILES_DIR)
-                #output = subprocess.run(["openvpn", full_filename], capture_output=True, text=True)
                 os.system(f"openvpn {full_filename}")
                 break
 
