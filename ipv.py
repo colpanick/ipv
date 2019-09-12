@@ -30,11 +30,10 @@ def get_avg_ping(url, ping_count=5):
 def rank():
     
     file_list = os.listdir(SERVER_FILES_DIR)
-    url_list = [get_url(filename) for filename in file_list]
-    url_dict = {url: filename for (url, filename) in zip(url_list, file_list)}
-    url_list = url_list[:5]
+    file_list = file_list[:6]
+    url_dict = {get_url(filename): filename for filename in file_list}
 
-    ping_dict = {url: get_avg_ping(url) for url in url_list}
+    ping_dict = {url: get_avg_ping(url) for url in url_dict.keys()}
     ranked_list = sorted(ping_dict.items(), key=lambda item: item[1])
     
     with open(RANK_FILE, "w") as outfile:
