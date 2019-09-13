@@ -4,13 +4,13 @@ import argparse
 import os
 import re
 import subprocess
+import sys
 
 IPV_DIR = "/usr/local/share/ipv"
 SERVER_FILES_DIR = os.path.join(IPV_DIR, "servers")
 RANK_FILE = os.path.join(IPV_DIR, "server_ratings.txt")
 
 #TODO Pull all servers from website
-#TODO Progress Bar
 #TODO Multiprocessing
 
 def get_url(filename):
@@ -33,7 +33,12 @@ def rank():
     #file_list = file_list[:6]  # For testing
     url_dict = {get_url(filename): filename for filename in file_list}
 
-    ping_dict = {url: get_avg_ping(url) for url in url_dict.keys()}
+    #ping_dict = {url: get_avg_ping(url) for url in url_dict.keys()}
+    ping_dict = {}
+    for current, url in enumerate(url_dict.keys()):
+        ping_dict[url] = get_avg_ping(url)
+        print (f"{current}/{len(url_dict)}", end="\r")
+
     ranked_list = sorted(ping_dict.items(), key=lambda item: item[1])
     
     with open(RANK_FILE, "w") as outfile:
@@ -44,13 +49,14 @@ def rank():
 
 def connect(rank_num):
     with open(RANK_FILE) as infile:
-        while True:
-            line = infile.readline()
+        for line in infile:
             rank, _, filename, _ = line.split('\t')
             if rank == rank_num:
                 os.chdir(SERVER_FILES_DIR)
                 os.system(f"openvpn {filename}")
-                break
+                return
+        print(f"Unable to find server with a ranking of {rank_num}", file=sys.stderr)
+        exit(1)
 
 
 if __name__ == "__main__":
