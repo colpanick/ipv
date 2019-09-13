@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import argparse
+import concurrent.futures
 import os
 import re
 import subprocess
@@ -11,7 +12,6 @@ SERVER_FILES_DIR = os.path.join(IPV_DIR, "servers")
 RANK_FILE = os.path.join(IPV_DIR, "server_ratings.txt")
 
 #TODO Pull all servers from website
-#TODO Multiprocessing
 
 def get_url(filename):
     filename = os.path.join(SERVER_FILES_DIR, filename)
@@ -25,19 +25,19 @@ def get_avg_ping(url, ping_count=5):
     ping_result = subprocess.run(["ping", "-i 0.2", f"-c {ping_count}", url], capture_output=True, text=True)
     output = ping_result.stdout
     times = [float(time) for time in re.findall(regex, output)]
+
     return sum(times) / ping_count # not using sum(times).  Server should be penalized for unreturned ping
 
 def rank():
     
     file_list = os.listdir(SERVER_FILES_DIR)
-    #file_list = file_list[:6]  # For testing
     url_dict = {get_url(filename): filename for filename in file_list}
-
-    #ping_dict = {url: get_avg_ping(url) for url in url_dict.keys()}
     ping_dict = {}
-    for current, url in enumerate(url_dict.keys()):
-        ping_dict[url] = get_avg_ping(url)
-        print (f"{current}/{len(url_dict)}", end="\r")
+    
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        results = {executor.submit(get_avg_ping, url): url for url in url_dict.keys()}
+        for f in concurrent.futures.as_completed(results):
+            ping_dict[results[f]] = f.result()
 
     ranked_list = sorted(ping_dict.items(), key=lambda item: item[1])
     
