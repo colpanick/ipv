@@ -46,11 +46,10 @@ def connect(rank_num):
     with open(RANK_FILE) as infile:
         while True:
             line = infile.readline()
-            rank, server, filename, _ = line.split('\t')
-            full_filename = os.path.join(SERVER_FILES_DIR, filename)
+            rank, _, filename, _ = line.split('\t')
             if rank == rank_num:
                 os.chdir(SERVER_FILES_DIR)
-                os.system(f"openvpn {full_filename}")
+                os.system(f"openvpn {filename}")
                 break
 
 
