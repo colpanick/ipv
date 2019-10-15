@@ -167,8 +167,7 @@ def remove(site):
             os.remove(file_to_remove)
 
 
-if __name__ == "__main__":
-
+def main():
     parser = argparse.ArgumentParser(description="Manage or connect to IP Vanish")
 
     parser.add_argument("--list", "-l", action="store_true", dest="list",
@@ -209,3 +208,7 @@ if __name__ == "__main__":
         connect(args.server)
     elif len(sys.argv) == 1:
         connect("1")
+
+
+if __name__ == "__main__":
+    main()
