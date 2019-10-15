@@ -75,7 +75,7 @@ def rank():
             outfile.write(f"{rank}\t{server}\t{filename}\t{time}\n")
 
 
-def init():
+def env_check():
 
     crudentials_file = os.path.join(IPV_DIR, "crudentials")
 
@@ -105,7 +105,7 @@ def init():
 
 
 def connect(rank_num):
-    init()
+    env_check()
     with open(RANK_FILE) as infile:
         for line in infile:
             rank, _, filename, _ = line.split('\t')
@@ -167,7 +167,7 @@ def remove(site):
             os.remove(file_to_remove)
 
 
-def main():
+def init():
     parser = argparse.ArgumentParser(description="Manage or connect to IP Vanish")
 
     parser.add_argument("--list", "-l", action="store_true", dest="list",
@@ -211,4 +211,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    init()
