@@ -30,6 +30,14 @@ Connect to the fastest server
 
 ### Options
 
+#### List
+`-l`
+
+`--list`
+
+Show a list of all available sites
+
+
 #### Download
 `-d <site>`
 
