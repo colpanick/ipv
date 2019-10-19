@@ -15,12 +15,23 @@ RANK_FILE = os.path.join(IPV_DIR, "server_ratings.txt")
 SERVER_FILES_URL = "https://www.ipvanish.com/software/configs/"
 SERVER_FILE_REGEX = r"ipvanish-\w{2}-(.*)-\w{3}-\w\d{2}\.ovpn"
 
+server_files_url_source = ""
+
+
+def get_server_files_url_source():
+    global server_files_url_source
+
+    if not server_files_url_source:
+        server_files_url_source = requests.get(SERVER_FILES_URL).content
+
+    return server_files_url_source
+
 
 def list_sites():
     regex = f'a href="{SERVER_FILE_REGEX}"'
     site_set = set()
 
-    res = requests.get(SERVER_FILES_URL).content.decode("UTF-8")
+    res = get_server_files_url_source().decode("UTF-8")
 
     for site in re.findall(regex, res):
         site_set.add(site)
@@ -126,7 +137,7 @@ def download(site):
     if not os.path.isdir(SERVER_FILES_DIR):
         os.makedirs(SERVER_FILES_DIR)
 
-    source = requests.get(SERVER_FILES_URL).content.decode("UTF-8")
+    source = get_server_files_url_source().decode("UTF-8")
 
     new_server_files = [url for url, city in re.findall(regex, source) if city == site]
     current_server_files = os.listdir(SERVER_FILES_DIR)
