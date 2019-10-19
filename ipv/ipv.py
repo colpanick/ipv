@@ -172,16 +172,16 @@ def init():
 
     parser.add_argument("--list", "-l", action="store_true", dest="list",
                         help="List all available sites")
-    parser.add_argument("--rank-servers", "-r", action="store_true", dest="rank_servers",
-                        help="Rank the servers based on ping time")
-    parser.add_argument("--server", "-s", action="store", dest="server",
-                        help="Connect to server at specified rank.")
     parser.add_argument("--download", "-d", action="store", dest="site",
                         help="Download all files from a particular site")
     parser.add_argument("--update", "-u", action="store_true", dest="update",
                         help="Update server file list")
     parser.add_argument("--remove", "-rm", action="store", dest="remove",
                         help="Delete all files for specified site")
+    parser.add_argument("--rank-servers", "-r", action="store_true", dest="rank_servers",
+                        help="Rank the servers based on ping time")
+    parser.add_argument("--server", "-s", action="store", dest="server",
+                        help="Connect to server at specified rank.")
     args = parser.parse_args()
 
     if args.list:
